@@ -343,6 +343,10 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../auth-client/build', 'index.html'));
   });
 
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running...')
+  })
 }
   
 
