@@ -1,0 +1,31 @@
+{
+  "name": "api",
+  "homepage": ".",
+  "proxy": "http://localhost:5000",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node api/server",
+    "server": "nodemon api/server.js",
+    "build": "cd auth-client && npm run build",
+    "install-client": "cd auth-client && npm install",
+    "dev": "concurrently \"nodemon api/server.js\" \"cd auth-client && npm start\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "npm run install-client && npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "concurrently": "^6.4.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.1.0",
+    "nodemailer": "^6.7.2",
+    "nodemon": "^2.0.15"
+  }
+}
