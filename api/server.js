@@ -15,12 +15,12 @@ const port = process.env.PORT || 5000
 const path = require('path')
 
 const secret = 'secret123'
-const mongoUrl = 'mongodb+srv://ashraf:Asraf2001@auth.uoksk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const mongoUrl = process.env.MONGODB_URI;
 
 
 const mongoServerHandler = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || mongoUrl, {
+    await mongoose.connect( mongoUrl, {
       useNewUrlParser: true
     });
     console.log("Connected to DB !!");
