@@ -335,7 +335,6 @@ app.get('/UserTodos/:id', (req, res) => {
 })
 
 
-
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
   app.use(express.static('auth-client/build'));
