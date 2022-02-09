@@ -17,10 +17,12 @@ const path = require('path')
 const secret = 'secret123'
 const mongoUrl = process.env.MONGODB_URI;
 
+console.log(mongoUrl)
+
 
 const mongoServerHandler = async () => {
   try {
-    await mongoose.connect( mongoUrl ||  'mongodb://localhost:27017/myFirstDatabase', {
+    await mongoose.connect(mongoUrl, {
       useNewUrlParser: true
     });
     console.log("Connected to DB !!");
@@ -140,8 +142,13 @@ app.post('/login', (req, res) => {
   const {email, password} = req.body
   let route = '/';
 
+  console.log(password)
+
   User.findOne({email})
+
   .then(userInfo => {
+
+    console.log(userInfo)
 
     const isPassValid = bcrypt.compareSync(password, userInfo.password)
 
