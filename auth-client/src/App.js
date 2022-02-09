@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     
-    axios.get('http://localhost:5000/user', {withCredentials: true})
+    axios.get('/user', {withCredentials: true})
     .then(res => {
       console.log(res)
       setData(res.data)

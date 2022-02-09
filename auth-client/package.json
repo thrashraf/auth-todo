@@ -1,5 +1,6 @@
 {
   "name": "auth-client",
+  "proxy": "http://localhost:5000",
   "homepage": ".",
   "version": "0.1.0",
   "private": true,

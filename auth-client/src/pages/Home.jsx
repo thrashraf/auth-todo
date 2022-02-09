@@ -23,7 +23,7 @@ export const Home = () => {
         //? if the user isn't auth then redirect to the login page
         if (!user.data) navigate('/login')
 
-        axios.post('http://localhost:5000/createTodo', data, {withCredentials: true})
+        axios.post('/createTodo', data, {withCredentials: true})
         .then(res => {
             console.log(res)
             const todoList = {todoId: res.data.todoId, input: res.data.input, isCheck: false}

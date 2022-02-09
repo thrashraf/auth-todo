@@ -34,7 +34,7 @@ export const Lists = props => {
             user.setData(userObj);
             const todoData = {id, isCheck: lists.todo[index].isCheck}
             
-            axios.patch(`http://localhost:5000/updateTodo`, todoData, {withCredentials: true})
+            axios.patch(`/updateTodo`, todoData, {withCredentials: true})
             .then(res => {
                 console.log(res)  
             })
@@ -47,7 +47,7 @@ export const Lists = props => {
 
     const deleteListhandler = id => {
         
-        axios.delete(`http://localhost:5000/deleteTodo/${id}`, {withCredentials: true})
+        axios.delete(`/deleteTodo/${id}`, {withCredentials: true})
         .then(res => {
             console.log(res)
 

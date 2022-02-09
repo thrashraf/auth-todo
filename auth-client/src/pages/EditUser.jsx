@@ -23,7 +23,7 @@ export const EditUser = () => {
 
         console.log(id)
 
-        axios.get(`http://localhost:5000/userDetail/${id}`)
+        axios.get(`/userDetail/${id}`)
         .then(res => {
             const data = res.data
 
@@ -40,7 +40,7 @@ export const EditUser = () => {
         const data = {id, name, email, role, password}
 
         toast.promise(
-            axios.post('http://localhost:5000/updateUserDetail', data, {withCredentials: true})
+            axios.post('/updateUserDetail', data, {withCredentials: true})
             .then(res => {
                 console.log(res)
                 // navigate('/admin')

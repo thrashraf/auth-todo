@@ -21,7 +21,7 @@ export const UsersTable = props => {
 
     useEffect(() => {
     
-        axios.get('http://localhost:5000/admin', {withCredentials: true})
+        axios.get('/admin', {withCredentials: true})
         .then(res => {
 
             console.log(res)
@@ -46,7 +46,7 @@ export const UsersTable = props => {
 
       const deleteUserHandler = id => {
 
-        axios.delete(`http://localhost:5000/deleteUser/${id}`)
+        axios.delete(`/deleteUser/${id}`)
         .then(res => {
             const index = user.findIndex(list => list.id === id);
             const userArr = [...user]
@@ -69,7 +69,7 @@ export const UsersTable = props => {
 
         console.log(id)
           
-        axios.get(`http://localhost:5000/UserTodos/${id}`)
+        axios.get(`/UserTodos/${id}`)
         .then(res => {
             
             const todos = [];

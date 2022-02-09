@@ -26,7 +26,7 @@ export const SignUp = () => {
             const data = {name, email, password}
             console.log(data)            
             toast.promise(
-            axios.post('http://localhost:5000/signup', data, {withCredentials: true})
+            axios.post('/signup', data, {withCredentials: true})
             .then(res => {
                 console.log(res)
                 const data = res.data;

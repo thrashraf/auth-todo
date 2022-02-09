@@ -17,7 +17,7 @@ export const Profile = () => {
         
         if (newPass === confPass) {
             
-            axios.post('http://localhost:5000/updateProfile', {password: newPass}, {withCredentials: true})
+            axios.post('/updateProfile', {password: newPass}, {withCredentials: true})
             .then(res => {
                 console.log(res)
             })

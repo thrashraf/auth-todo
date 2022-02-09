@@ -24,7 +24,7 @@ export const Login = () => {
         const data = {email, password}
 
 
-        axios.post('http://localhost:5000/login', data, {withCredentials: true})
+        axios.post('/login', data, {withCredentials: true})
         .then(res => {
             console.log(res)
             user.setData(res.data)
