@@ -10,6 +10,8 @@ const cookieParser = require('cookie-parser');
 const nodemailer = require('nodemailer');
 require('dotenv').config()
 
+const port = process.env.PORT || 5000
+
 const path = require('path')
 
 const secret = 'secret123'
@@ -345,4 +347,4 @@ if (process.env.NODE_ENV === 'production') {
 }
   
 
-app.listen(process.env.PORT || 5000, () => console.log('server start')) 
+app.listen(port, () => console.log(`server is running on ${port}`)) 
