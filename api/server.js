@@ -20,7 +20,7 @@ const mongoUrl = process.env.MONGODB_URI;
 
 const mongoServerHandler = async () => {
   try {
-    await mongoose.connect( mongoUrl, {
+    await mongoose.connect( mongoUrl ||  'mongodb://localhost:27017/myFirstDatabase', {
       useNewUrlParser: true
     });
     console.log("Connected to DB !!");
