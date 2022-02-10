@@ -2,58 +2,34 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const cors = require('cors');
+
+const dbConnection = require('./config/db.js');
+
+
+const cors = require('cors'); 
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const nodemailer = require('nodemailer');
+const path = require('path')
+
+const router = require('./routes/usersRoutes')
+
 require('dotenv').config()
 
 const port = process.env.PORT || 5000
+const secret = process.env.SECRET
 
-const path = require('path')
-
-const secret = 'secret123'
-const mongoUrl = process.env.MONGODB_URI;
-
-console.log(mongoUrl)
-
-
-const mongoServerHandler = async () => {
-  try {
-    await mongoose.connect(mongoUrl, {
-      useNewUrlParser: true
-    });
-    console.log("Connected to DB !!");
-  } catch (e) {
-    console.log(e);
-    throw e;
-  }
-}
-
-mongoServerHandler()
-
+//import db connection
+dbConnection()
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-
-//sender email config
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'zulashrafvns@gmail.com',
-    pass: 'ptsqvsmsjuniauos'
-  },
-  tls: {
-    rejectUnauthorized: false
-  }
-})
+//import sender email config
 
 
-
+//cors setting
 app.use(cors({
   credentials: true,
   origin: 'http://localhost:3000',
@@ -61,61 +37,11 @@ app.use(cors({
 }))
 
 
-app.post('/signup', async (req, res) => {
+// app.post('/signup', async (req, res) => {
 
-    const {name, email, password} = req.body;
-    console.log(req.body)
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    const user = new User({name, email, password: hashedPassword, date: new Date(), role: 'user', isVerified: false});
+// );
 
-    try {
-      const checkExistingEmail = await User.findOne({email})
-
-      if (checkExistingEmail) {
-
-        return res.status(400).send({
-          message: "email already exist"
-        });
-      }
-
-      await user.save().then(userInfo => {
-        jwt.sign({ id:userInfo._id, email:userInfo.email, name:userInfo.name }, secret, (err,token) => {
-
-          if (err) {
-            console.log(err);
-            res.sendStatus(500);
-            
-          } else {
-            // res.cookie('token', token, {httpOnly : false}).json({id:userInfo._id,email:userInfo.email, name:userInfo.name, redirectUrl: '/', todo: userInfo.todo});
-
-            const mailOptions = {
-              from: 'zulashrafvns@gmail.com',
-              to: userInfo.email,
-              subject: 'Verify your email',
-              html: `<h2>Hello,</h2>
-                    <p>Hi ${userInfo.name}! Please verify your email to continue...</p>
-                    <a href="http://${req.headers.host}/user/verify-email?token=${userInfo._id}">Verify</a>`
-            }
-
-            transporter.sendMail(mailOptions, async(err) => {
-
-              if (err) {
-                console.log(err)
-              } else {
-                res.json({msg: 'Please verify your email.'})
-              }
-
-            })
-
-          }
-        });
-      })
-
-    } catch (error) {
-      console.log(error);
-      res.sendStatus(500);
-    }
-});
+app.use('/api', router)
 
 
 app.get('/user/verify-email', async(req, res) => {
@@ -125,9 +51,7 @@ app.get('/user/verify-email', async(req, res) => {
     console.log(token)
     const user = await User.findByIdAndUpdate({_id: token }, {isVerified: true})
     .then(userInfo => {
-      
       res.redirect('http://localhost:3000/login')
-      
     })
     
   } catch (error) {
