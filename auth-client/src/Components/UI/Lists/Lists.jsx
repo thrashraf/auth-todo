@@ -34,7 +34,7 @@ export const Lists = props => {
             user.setData(userObj);
             const todoData = {id, isCheck: lists.todo[index].isCheck}
             
-            axios.patch(`/updateTodo`, todoData, {withCredentials: true})
+            axios.patch(`/api/todo/updateTodo/:id`, todoData, {withCredentials: true})
             .then(res => {
                 console.log(res)  
             })
@@ -47,7 +47,7 @@ export const Lists = props => {
 
     const deleteListhandler = id => {
         
-        axios.delete(`/deleteTodo/${id}`, {withCredentials: true})
+        axios.delete(`/api/todo/deleteTodo/${id}`, {withCredentials: true})
         .then(res => {
             console.log(res)
 
@@ -65,9 +65,8 @@ export const Lists = props => {
 
         if (!lists || (lists && lists.todo.length === 0) ) {
             return (
-                <section className="flex justify-between  bg-white px-7 py-5 first:rounded-firstChild last:rounded-lastChild dark:bg-gray-800 dark:text-white dark:line-through transition-colors duration-300 ease-out" >
+                <section className={`flex justify-between  bg-white px-7 py-5 rounded-lg dark:bg-gray-800 dark:text-white dark:line-through transition-colors duration-300 ease-out`} >
                 <section className="flex">
-                   
                     <li className="list-none pl-5"> Plan your day 👋🍃</li>
                 </section>
             </section>    
@@ -94,9 +93,10 @@ export const Lists = props => {
                 }
 
             }).map(list => {
-            
+
+            //console.log(lists.todo.length)
             return (
-                <section className="flex justify-between  bg-white px-7 py-5 first:rounded-firstChild last:rounded-lastChild dark:bg-gray-800 dark:text-white dark:line-through transition-colors duration-300 ease-out"  key={list.todoId}>
+                <section className={`flex justify-between  bg-white px-7 py-5 dark:bg-gray-800 dark:text-white dark:line-through transition-colors duration-300 ease-out ${lists.todo.length === 1 ? 'rounded-md' : 'first:rounded-firstChild last:rounded-lastChild '} `}  key={list.todoId}>
                 <section className="flex">
                     <span onClick={checkHandler.bind(this, list.todoId)} className="w-6 h-6 bg-white border border-gray-400 rounded-full dark:bg-gray-900 dark:border-gray-900" style={list.isCheck ? checkListStyle() : null}>
                         <img src={checkIcon} alt="check" className="w-3 h-3 relative top-1 left-1" style={{'display': list.isCheck ? 'block' : 'none'}}/>

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { Button } from '../Components/UI/Button/Button';
 import { Input } from '../Components/UI/Input/Input';
-import { ToastContainer, toast, Zoom, Bounce } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const EditUser = () => {
@@ -13,8 +13,6 @@ export const EditUser = () => {
     const [role, setNewRole] = useState('')
     const [password, setNewPassword] = useState('')
 
-    const navigate = useNavigate()
-
     const location = useLocation();
     const id = location.state.id
     
@@ -23,10 +21,9 @@ export const EditUser = () => {
 
         console.log(id)
 
-        axios.get(`/userDetail/${id}`)
+        axios.get(`/api/admin/userDetail/${id}`)
         .then(res => {
             const data = res.data
-
             console.log(res.data)
             setNewName(data.name)
             setNewEmail(data.email)
@@ -40,7 +37,7 @@ export const EditUser = () => {
         const data = {id, name, email, role, password}
 
         toast.promise(
-            axios.post('/updateUserDetail', data, {withCredentials: true})
+            axios.post('/api/admin/updateUserDetail', data, {withCredentials: true})
             .then(res => {
                 console.log(res)
                 // navigate('/admin')

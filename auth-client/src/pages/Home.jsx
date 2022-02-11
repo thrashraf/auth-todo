@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 
 export const Home = () => {
 
-    
     const [filter, setFilter] = useState('All');
     const [input, setInput] = useState('')
 
@@ -23,7 +22,7 @@ export const Home = () => {
         //? if the user isn't auth then redirect to the login page
         if (!user.data) navigate('/login')
 
-        axios.post('/createTodo', data, {withCredentials: true})
+        axios.post('/api/todo/createTodo', data, {withCredentials: true})
         .then(res => {
             console.log(res)
             const todoList = {todoId: res.data.todoId, input: res.data.input, isCheck: false}
@@ -37,10 +36,8 @@ export const Home = () => {
             setInput('')
             // console.log(userObj)
           
-            
         })
     }
-  
   
     return (
       

@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { Input } from '../Components/UI/Input/Input'
 import { Button } from '../Components/UI/Button/Button'
 import axios from 'axios'
 import { userContext } from '../userContext'
-import { ToastContainer, toast, Zoom, Bounce } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const SignUp = () => {
@@ -14,46 +14,36 @@ export const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
 
-    
-
     const user = useContext(userContext);
-    const navigate = useNavigate()
 
-    const onSubmitHandler = e => {
+    const onSubmitHandler =  async (e) => {
+
         e.preventDefault()
          if (password === confirmPass) {
 
             const data = {name, email, password}
-            console.log(data)            
-            toast.promise(
+            console.log(data)     
+
             axios.post('/api/user/signup', data, {withCredentials: true})
             .then(res => {
-                console.log(res)
+                //console.log(res)
                 const data = res.data;
+                toast.success("successful create account")
                 user.setData(data)
-                navigate(res.data.redirectUrl)
-
+               
             })
             .catch(err => {
-                // console.log(err.response.data.message)
-            }),
-            {
-                pending: 'Creating your account 🛠️',
-                success: 'Please verify your email 📬',
-                error: 'Email already exist 🏁'
-            }
-            )
+                //console.log(err)
+                const errMessage = err.response.data.message
+                toast.error(errMessage);
+                
+            })
             
          } else {
-
-            alert('Password must be same')
+            toast.error('password not match')
          }
     } 
 
-
-    
-
-    
     
 
     return (

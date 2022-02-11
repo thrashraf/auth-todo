@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     
-    axios.get('/user', {withCredentials: true})
+    axios.get('/api/user/user', {withCredentials: true})
     .then(res => {
       console.log(res)
       setData(res.data)
@@ -27,12 +27,9 @@ function App() {
 
   let route = (
     <Routes>
-      
         <Route path="/" element={ <Home/> } exact />
         <Route path="/login" element={ <Login/> }/>
         <Route path="/signup" element={ <SignUp/> } />
-       
- 
     </Routes>
   )
 

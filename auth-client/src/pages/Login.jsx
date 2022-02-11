@@ -6,7 +6,7 @@ import { Input } from '../Components/UI/Input/Input'
 import { Button } from '../Components/UI/Button/Button'
 import axios from 'axios'
 import { userContext } from '../userContext'
-import { ToastContainer, toast, Zoom, Bounce } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -24,7 +24,7 @@ export const Login = () => {
         const data = {email, password}
 
 
-        axios.post('/login', data, {withCredentials: true})
+        axios.post('/api/user/login', data, {withCredentials: true})
         .then(res => {
             console.log(res)
             user.setData(res.data)
@@ -35,7 +35,6 @@ export const Login = () => {
         })
     }
 
-    
 
     return (
         <div className="w-full grid grid-cols-2 font-mono mt-10 overflow-hidden">

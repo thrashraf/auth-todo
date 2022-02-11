@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 
 const dbConnection = require('./config/db.js');
 
-
 const cors = require('cors'); 
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
@@ -13,7 +12,9 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const path = require('path')
 
-const router = require('./routes/usersRoutes')
+const userRoute = require('./routes/usersRoutes')
+const adminRoute = require('./routes/adminRoute')
+const todoRoute = require('./routes/todoRoute')
 
 require('dotenv').config()
 
@@ -37,11 +38,8 @@ app.use(cors({
 }))
 
 
-// app.post('/signup', async (req, res) => {
 
-// );
-
-app.use('/api', router)
+app.use('/api', userRoute, adminRoute, todoRoute)
 
 
 app.get('/user/verify-email', async(req, res) => {
@@ -51,73 +49,13 @@ app.get('/user/verify-email', async(req, res) => {
     console.log(token)
     const user = await User.findByIdAndUpdate({_id: token }, {isVerified: true})
     .then(userInfo => {
-      res.redirect('http://localhost:3000/login')
+      res.redirect('/login')
     })
-    
   } catch (error) {
     
   }
 })
 
-
-
-app.post('/login', (req, res) => {
-
-  const {email, password} = req.body
-  let route = '/';
-
-  console.log(password)
-
-  User.findOne({email})
-
-  .then(userInfo => {
-
-    console.log(userInfo)
-
-    const isPassValid = bcrypt.compareSync(password, userInfo.password)
-
-    if (isPassValid) {
-      jwt.sign({id:userInfo._id,email:userInfo.email, name:userInfo.name}, secret, (err,token) => {
-        if (err) {
-          console.log(err);
-          return res.status(401).send({
-            message: "Invalid password"
-          });
-        } else {
-
-          if (!userInfo.isVerified) return res.status(401).send({
-            message: "Please verify your account"
-          });
-          
-          if (userInfo.role === 'Admin' || userInfo.role === 'admin') {
-            route = '/admin'
-          }
-
-          res.cookie('token', token, {httpOnly : false})
-          .json({id:userInfo._id,email:userInfo.email, name:userInfo.name, redirectUrl: route, role: userInfo.role, todo: userInfo.todo});
-          
-        }
-      });
-    } else {
-
-      return res.status(400).send({
-        message: "password incorrect"
-      });
-    }
-
-  });
-})
-
-
-app.get('/user', (req, res) => {
-
-  const cookie = jwt.verify(req.cookies.token, secret);
-
-  User.findById(cookie.id)
-  .then(userInfo => {
-    res.json(userInfo)
-  })
-})
 
 
 app.post('/updateProfile', (req, res) => {
@@ -130,139 +68,6 @@ app.post('/updateProfile', (req, res) => {
   }).catch(err => {
     console.log(err)
   }) 
-})
-
-
-app.get('/admin', async (req, res) => {
-
-  const users = await User.find({});
-
-  const userMap = {};
-  users.forEach((user) => {
-      userMap[user._id] = user;
-  });
-  
-  res.json(userMap);
-
-})
-
-app.delete('/deleteUser/:id', (req, res) => {
-
-  const id = req.params.id
-
-  User.findByIdAndDelete(id)
-  .then(userInfo => {
-    res.send(userInfo)
-  })
-  .catch(err => {
-    console.log(err)
-  })
-})
-
-app.get('/userDetail/:id', (req, res) => {
-
-  const id = req.params.id;
-
-  console.log(id)
-
-  User.findById(id)
-  .then(userInfo => {
-    res.json(userInfo)
-  })
-})
-
-
-app.post('/updateUserDetail', (req, res) => {
-
-  let params = {
-    name: req.body.name,
-    email: req.body.email,
-    role: req.body.role,
-    password: req.body.password ? bcrypt.hashSync(req.body.password, 10) : null
-  }
-
-  console.log(params.isAdmin)
-  console.log(req.body.role)
-
-  //this is to delete the null value
-  for(let prop in params) if(!params[prop]) delete params[prop];
-
-  console.log(params.role)
-  User.findByIdAndUpdate({_id: req.body.id}, params)
-  .then(userInfo => {
-    res.json(userInfo)
-  })
-  .catch(err => {
-    res.json(err)
-  })
-})
-
-
-app.post('/createTodo', (req, res) => {
-
-  const {input, isCheck} = req.body
-  
-  const todoId = new mongoose.Types.ObjectId()
-  const todo = {todoId, input, isCheck}
-
-  const cookie = jwt.verify(req.cookies.token, secret);
-
-  console.log(cookie.id)
-
-  User.findByIdAndUpdate({_id: cookie.id}, {$push: {todo: todo}})
-  .then(userInfo => {
-    res.json({todoId: todoId, input: input, isCheck: false})
-  })
-  .catch(err => {
-    res.json(err)
-  })
-
-})
-
-app.patch('/updateTodo', (req, res) => {
-  
-  const { id, isCheck } = req.body
-  console.log(isCheck)
-  console.log(req.cookies)
-  const cookie = jwt.verify(req.cookies.token, secret);
-
-  User.findOneAndUpdate({_id: cookie.id}, {$set: {'todo.$[el].isCheck': isCheck}}, { 
-    arrayFilters: [{ "el.todoId": mongoose.Types.ObjectId(id) }],
-    new: true
-  })
-  .then(userInfo => {
-    res.json(userInfo)
-  })
-  .catch(err => {
-    res.json(err)
-  })
-})
-
-app.delete('/deleteTodo/:id', (req, res) => {
-  
-  const id = req.params.id;
-  const cookie = jwt.verify(req.cookies.token, secret);
-  console.log(id)
-
-
-  User.findOneAndUpdate({_id: cookie.id}, {$pull: {"todo": {todoId: mongoose.Types.ObjectId(id)}}})
-  .then(userInfo => {
-    res.json({todo: userInfo.todo})
-  })
-  .catch(err => {
-    res.json(err)
-  }) 
-})
-
-app.get('/UserTodos/:id', (req, res) => {
-
-  const id = req.params.id
-
-  User.findById({_id: id})
-  .then(userInfo => {
-    res.json({todo: userInfo.todo})
-  })
-  .catch(err => res.json(err))
 })
 
 
