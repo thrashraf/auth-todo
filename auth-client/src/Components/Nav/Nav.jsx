@@ -34,13 +34,13 @@ export const Nav = () => {
     
     return (
         <div className="flex w-full justify-between py-5 px-10 font-mono bg-gray-100" style={pathname === '/login' || pathname === '/signup' ? {display: 'none'} : {display: 'flex'}}>
-            <section className="flex w-1/3 justify-evenly font-bold">
+            <section className={`flex w-1/3 justify-evenly font-bold ${user.data ? 'flex' : 'hidden'}`}>
                 <p className=" cursor-pointer"><NavLink to="/">HOME</NavLink></p>
                 {user.data ? <p className="cursor-pointer"><NavLink to="/profile">PROFILE</NavLink></p> : null}
                 {user.data && user.data.role === 'Admin' ? admin : null}
             </section>  
 
-            <section className="flex justify-between">
+            <section className={`flex  ${user.data ? 'justify-between' : ' w-full justify-end '}`}>
                 <Button onClick={user.data ? logoutHandler : redirectLogin} name={user.data ? "LOGOUT" : "LOGIN"}/>
             </section>
         </div>

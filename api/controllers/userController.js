@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
 
+const env = process.env.NODE_ENV | 'dev'
+
 
 module.exports.singUp = async (req, res) => {
 
@@ -42,7 +44,7 @@ module.exports.singUp = async (req, res) => {
         subject: 'Verify your email',
         html: `<h2>Hello,</h2>
                 <p>Hi ${userInfo.name}! Please verify your email to continue...</p>
-                <a href="http://${req.headers.host}/user/verify-email?token=${userInfo._id}">Verify</a>`
+                <a href="http://${req.headers.host}/api/user/verify-email?token=${userInfo._id}">Verify</a>`
       }
 
       transporter.sendMail(mailOptions, async (err) => {
@@ -125,3 +127,20 @@ module.exports.user = async (req, res) => {
   })
 }
 
+
+module.exports.verifyUser = async (req, res) => {
+
+  console.log(req.headers)
+
+  try {
+    const token = req.query.token;
+    console.log(token)
+    const user = await User.findByIdAndUpdate({_id: token }, {isVerified: true})
+    .then(userInfo => {
+      res.redirect(`${env === 'production' ? "https://todo-auth-v2.herokuapp.com/login" : 'http://localhost:3000/login' }`)
+    })
+  } catch (error) {
+   console.log(error) 
+  }
+
+}

@@ -27,36 +27,14 @@ dbConnection()
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-//import sender email config
-
-
-//cors setting
+//cors
 app.use(cors({
   credentials: true,
   origin: 'http://localhost:3000',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }))
 
-
-
 app.use('/api', userRoute, adminRoute, todoRoute)
-
-
-app.get('/user/verify-email', async(req, res) => {
-
-  try {
-    const token = req.query.token;
-    console.log(token)
-    const user = await User.findByIdAndUpdate({_id: token }, {isVerified: true})
-    .then(userInfo => {
-      res.redirect('/login')
-    })
-  } catch (error) {
-    
-  }
-})
-
-
 
 app.post('/updateProfile', (req, res) => {
 
