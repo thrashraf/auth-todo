@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const dbConnection = require('./config/db.js');
+const sslRedirect = require('heroku-ssl-redirect')
 
 const cors = require('cors'); 
 const bcrypt = require('bcrypt');
@@ -33,6 +34,9 @@ app.use(cors({
   origin: 'http://localhost:3000',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }))
+
+// enable ssl redirect
+app.use(sslRedirect());
 
 app.use('/api', userRoute, adminRoute, todoRoute)
 
