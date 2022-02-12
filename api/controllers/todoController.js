@@ -28,6 +28,9 @@ module.exports.updateTodo = async(req, res) => {
     const { id, isCheck } = req.body
     //console.log(isCheck)
     //console.log(req.cookies)
+
+    //console.log(id)
+
     const cookie = jwt.verify(req.cookies.token, process.env.SECRET);
 
     User.findOneAndUpdate({_id: cookie.id}, {$set: {'todo.$[el].isCheck': isCheck}}, { 

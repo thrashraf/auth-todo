@@ -3,7 +3,7 @@ const { createTodo, updateTodo, deleteTodo } = require('../controllers/todoContr
 const todoRoute = express.Router();
 
 todoRoute.post('/todo/createTodo', createTodo)
-todoRoute.patch('/todo/updateTodo', updateTodo)
+todoRoute.patch('/todo/updateTodo/:id', updateTodo)
 todoRoute.delete('/todo/deleteTodo/:id', deleteTodo)
 
 module.exports = todoRoute;

@@ -98,7 +98,7 @@ module.exports.login = (req, res) => {
   })
 }
 
-module.exports.user = async (req, res, next) => {
+module.exports.user = (req, res) => {
 
   const cookie = jwt.verify(req.cookies.token, process.env.SECRET);
 
@@ -108,7 +108,7 @@ module.exports.user = async (req, res, next) => {
   })
   .catch(err => {
     console.log(err)
-    next()
+    
   })
 }
 
