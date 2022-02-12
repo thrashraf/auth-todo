@@ -1,18 +1,11 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-
 const dbConnection = require('./config/db.js');
-const sslRedirect = require('heroku-ssl-redirect')
-
+const sslRedirect = require('heroku-ssl-redirect').default
 const cors = require('cors'); 
-const bcrypt = require('bcrypt');
-const User = require('./models/User');
-const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const path = require('path')
-
 const userRoute = require('./routes/usersRoutes')
 const adminRoute = require('./routes/adminRoute')
 const todoRoute = require('./routes/todoRoute')
