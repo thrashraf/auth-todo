@@ -64,18 +64,19 @@ module.exports.singUp = async (req, res) => {
 }
 
 
-module.exports.login = async (req, res) => {
+module.exports.login = (req, res) => {
 
   const {email, password} = req.body
   
   let route = '/';
-  console.log(password)
+  //console.log(password)
 
   User.findOne({email})
   .then(userInfo => {
 
-  console.log(userInfo)
+    //console.log(userInfo)
 
+    console.log(password)
     const isPassValid = bcrypt.compareSync(password, userInfo.password)
 
     if (isPassValid) {
@@ -107,15 +108,16 @@ module.exports.login = async (req, res) => {
       });
 
     } else {
-
       return res.status(400).send({
         message: "password incorrect"
       });
     }
-  });
+  }).catch(err => {
+    res.status(400).send({
+      message: "password incorrect"
+    });
+  })
 }
-
-
 
 module.exports.user = async (req, res) => {
 
@@ -126,7 +128,6 @@ module.exports.user = async (req, res) => {
     res.status(200).json(userInfo)
   })
 }
-
 
 module.exports.verifyUser = async (req, res) => {
 
@@ -142,5 +143,26 @@ module.exports.verifyUser = async (req, res) => {
   } catch (error) {
    console.log(error) 
   }
+
+}
+
+module.exports.updateUser = async(req, res) => {
+
+  const cookie = await jwt.verify(req.cookies.token, process.env.SECRET);
+  //console.log(cookie)
+  const hashedPassword = bcrypt.hashSync(req.body.password, 10)
+  console.log(req.body.password)
+
+  await User.findByIdAndUpdate({_id: cookie.id}, {$set: {password: hashedPassword}})
+  .then(userInfo => {
+
+    console.log(userInfo)
+    res.status(200).json({message: 'successfully update password!'})
+
+  }).catch(err => {
+    console.log(err)
+    res.status(400).json({message: 'password not match'})
+
+  }) 
 
 }

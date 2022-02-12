@@ -3,6 +3,8 @@ import { Input } from '../Components/UI/Input/Input'
 import { Button } from '../Components/UI/Button/Button'
 import profile from '../assets/profile.png'
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -17,13 +19,17 @@ export const Profile = () => {
         
         if (newPass === confPass) {
             
-            axios.post('/updateProfile', {password: newPass}, {withCredentials: true})
+            axios.post('/api/user/updateProfile', {password: newPass}, {withCredentials: true})
             .then(res => {
                 console.log(res)
+                toast.success(res.data.message)
+            })
+            .catch(err => {
+                toast.error(err.response.data.message)
             })
 
         } else {
-            alert('password must be same')
+            toast.error('password must be same')
         }
     }
 
@@ -46,6 +52,18 @@ export const Profile = () => {
                 </section>
 
                 <Button name="SAVE CHANGE" className="m-auto" />
+
+                <ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </form>
         </div>
     )

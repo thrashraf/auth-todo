@@ -36,18 +36,6 @@ app.use(cors({
 
 app.use('/api', userRoute, adminRoute, todoRoute)
 
-app.post('/updateProfile', (req, res) => {
-
-  const cookie = jwt.verify(req.cookies.token, secret);
-  const hashedPassword = bcrypt.hashSync(req.body.password, 10)
-  User.updateOne({id: cookie.id}, {$set: {password: hashedPassword}})
-  .then(userInfo => {
-    console.log(userInfo)
-  }).catch(err => {
-    console.log(err)
-  }) 
-})
-
 
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
