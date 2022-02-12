@@ -17,14 +17,14 @@ export const Home = () => {
         e.preventDefault()
 
         const data = {input, isCheck: false}
-        console.log(data)
+        //console.log(data)
 
         //? if the user isn't auth then redirect to the login page
         if (!user.data) navigate('/login')
 
         axios.post('/api/todo/createTodo', data, {withCredentials: true})
         .then(res => {
-            console.log(res)
+            //console.log(res)
             const todoList = {todoId: res.data.todoId, input: res.data.input, isCheck: false}
 
             //? copy user data

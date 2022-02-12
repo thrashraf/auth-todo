@@ -22,7 +22,7 @@ export const SignUp = () => {
          if (password === confirmPass) {
 
             const data = {name, email, password}
-            console.log(data)     
+            //console.log(data)     
 
             axios.post('/api/user/signup', data, {withCredentials: true})
             .then(res => {

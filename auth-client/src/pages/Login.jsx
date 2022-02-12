@@ -26,7 +26,7 @@ export const Login = () => {
 
         axios.post('/api/user/login', data, {withCredentials: true})
         .then(res => {
-            console.log(res)
+            //console.log(res)
             user.setData(res.data)
             navigate(res.data.redirectUrl)
             

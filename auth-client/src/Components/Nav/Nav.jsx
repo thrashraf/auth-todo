@@ -13,7 +13,7 @@ export const Nav = () => {
     const redirectLogin = () => navigate('/login')
 
     const { pathname } = useLocation()
-    console.log(pathname)
+    //console.log(pathname)
 
     const logoutHandler = () => {
         removeCookie('token')

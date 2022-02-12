@@ -36,12 +36,12 @@ export const Lists = props => {
             
             axios.patch(`/api/todo/updateTodo/:id`, todoData, {withCredentials: true})
             .then(res => {
-                console.log(res)  
+                //console.log(res)  
             })
             .catch(err => console.log(err))
 
-            console.log(id)
-            console.log(index) 
+            //console.log(id)
+            //console.log(index) 
     }
 
 

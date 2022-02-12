@@ -5,8 +5,6 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config()
 
-const env = process.env.NODE_ENV | 'dev'
-
 
 module.exports.singUp = async (req, res) => {
 
@@ -138,7 +136,7 @@ module.exports.verifyUser = async (req, res) => {
     console.log(token)
     const user = await User.findByIdAndUpdate({_id: token }, {isVerified: true})
     .then(userInfo => {
-      res.redirect(`${env === 'production' ? "https://todo-auth-v2.herokuapp.com/login" : 'http://localhost:3000/login' }`)
+      res.redirect("https://todo-auth-v2.herokuapp.com/login")
     })
   } catch (error) {
    console.log(error) 

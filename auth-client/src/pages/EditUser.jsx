@@ -19,12 +19,12 @@ export const EditUser = () => {
 
     useEffect(() => {
 
-        console.log(id)
+        //console.log(id)
 
         axios.get(`/api/admin/userDetail/${id}`)
         .then(res => {
             const data = res.data
-            console.log(res.data)
+            //console.log(res.data)
             setNewName(data.name)
             setNewEmail(data.email)
             setNewRole(data.role)
@@ -39,11 +39,11 @@ export const EditUser = () => {
         toast.promise(
             axios.post('/api/admin/updateUserDetail', data, {withCredentials: true})
             .then(res => {
-                console.log(res)
+                //console.log(res)
                 // navigate('/admin')
                  
             }).catch(err => {
-                console.log(err)
+                //console.log(err)
             }),{
                 pending: 'Updating your account 🧑‍🔧',
                 success: 'Successful Upadate ✅',

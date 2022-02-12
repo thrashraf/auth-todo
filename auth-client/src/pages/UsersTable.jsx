@@ -40,13 +40,13 @@ export const UsersTable = props => {
 
         axios.delete(`/api/admin/deleteUser/${id}`)
             .then(res => {
-                console.log('delete')
+                //console.log('delete')
                 const index = user.findIndex(list => list.id === id);
                 const userArr = [...user]
 
                 userArr.splice(index, 1)
                 setUser(userArr)
-                console.log(user)
+                //console.log(user)
             })
     }
 
@@ -56,7 +56,7 @@ export const UsersTable = props => {
 
     const usersTodos = id => {
         setBackdrop(true)
-        console.log(id)
+        //console.log(id)
         axios.get(`/api/admin/UserTodo/${id}`)
             .then(res => {
 
@@ -67,7 +67,7 @@ export const UsersTable = props => {
                 }
                 setTodos(todos)
 
-                console.log(todos)
+                //console.log(todos)
             })
             .catch(err => console.log(err))
     }
@@ -75,7 +75,7 @@ export const UsersTable = props => {
     const tableData = () => {
 
         return user ? user.map(users => {
-            console.log(users)
+            //console.log(users)
             return (
                 <tr key={users.id}>
                     <td className='p-4 bg-white'>{users.name}</td>
