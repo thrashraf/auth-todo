@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const transporter = require('../config/nodemail');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -32,28 +31,12 @@ module.exports.singUp = async (req, res) => {
       return res.status(401).send({
         message: "email already exist"
       });
+    } else {
+
+      await user.save()
+      res.status(201).json({redirect: '/login'})
     }
 
-    await user.save().then(userInfo => {
-
-      const mailOptions = {
-        from: 'zulashrafvns@gmail.com',
-        to: userInfo.email,
-        subject: 'Verify your email',
-        html: `<h2>Hello,</h2>
-                <p>Hi ${userInfo.name}! Please verify your email to continue...</p>
-                <a href="http://${req.headers.host}/api/user/verify-email?token=${userInfo._id}">Verify</a>`
-      }
-
-      transporter.sendMail(mailOptions, async (err) => {
-        if (err) {
-          console.log(err)
-        } else {
-          res.json({ msg: 'Please verify your email.' })
-        }
-
-      })
-    })
 
   } catch (error) {
     console.log(error);
@@ -131,22 +114,7 @@ module.exports.user = async (req, res, next) => {
   })
 }
 
-module.exports.verifyUser = async (req, res) => {
 
-  console.log(req.headers)
-
-  try {
-    const token = req.query.token;
-    console.log(token)
-    const user = await User.findByIdAndUpdate({_id: token }, {isVerified: true})
-    .then(userInfo => {
-      res.redirect("https://todo-auth-v2.herokuapp.com/login")
-    })
-  } catch (error) {
-   console.log(error) 
-  }
-
-}
 
 module.exports.updateUser = async(req, res) => {
 

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { Input } from '../Components/UI/Input/Input'
 import { Button } from '../Components/UI/Button/Button'
 import axios from 'axios'
@@ -14,7 +14,9 @@ export const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
 
-    const user = useContext(userContext);
+    const navigate = useNavigate()
+
+    //const user = useContext(userContext);
 
     const onSubmitHandler =  async (e) => {
 
@@ -27,13 +29,13 @@ export const SignUp = () => {
             axios.post('/api/user/signup', data, {withCredentials: true})
             .then(res => {
                 //console.log(res)
-                const data = res.data;
                 toast.success("successful create account")
-                user.setData(data)
+                navigate(res.data.redirect)
+            
                
             })
             .catch(err => {
-                //console.log(err)
+                console.log(err)
                 const errMessage = err.response.data.message
                 toast.error(errMessage);
                 

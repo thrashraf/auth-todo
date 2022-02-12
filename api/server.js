@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const dbConnection = require('./config/db.js');
-const sslRedirect = require('heroku-ssl-redirect').default
 const cors = require('cors'); 
 const cookieParser = require('cookie-parser');
 const path = require('path')
@@ -27,9 +26,6 @@ app.use(cors({
   origin: 'http://localhost:3000',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }))
-
-// enable ssl redirect
-app.use(sslRedirect());
 
 app.use('/api', userRoute, adminRoute, todoRoute)
 
