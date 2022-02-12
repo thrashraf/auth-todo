@@ -117,13 +117,17 @@ module.exports.login = (req, res) => {
   })
 }
 
-module.exports.user = async (req, res) => {
+module.exports.user = async (req, res, next) => {
 
   const cookie = jwt.verify(req.cookies.token, process.env.SECRET);
 
   User.findById(cookie.id)
   .then(userInfo => {
     res.status(200).json(userInfo)
+  })
+  .catch(err => {
+    console.log(err)
+    next()
   })
 }
 
