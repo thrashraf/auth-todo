@@ -69,8 +69,6 @@ module.exports.login = (req, res) => {
             message: "Invalid password"
           });
         } else {
-
-          if (!userInfo.isVerified) return res.status(401).send({message: "Please verify your account"});
           
           if (userInfo.role === 'Admin' || userInfo.role === 'admin') {
             route = '/admin'

@@ -20,7 +20,7 @@ const User = mongoose.model('User', new mongoose.Schema({
     todo: [],
     date: Date,
     role: String,
-    isVerified: Boolean
+   
 }))
 
 module.exports = User;
